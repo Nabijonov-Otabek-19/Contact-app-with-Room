@@ -19,8 +19,8 @@ class AddUserFragment : DialogFragment() {
     private val binding get() = _binding!!
 
     private var appDB = AppDatabase.getInstance()
-    private var listener: (() -> Unit)? = null
 
+    private var listener: (() -> Unit)? = null
     fun setListener(block: () -> Unit) {
         listener = block
     }
