@@ -59,14 +59,8 @@ class AddUserFragment : DialogFragment() {
         binding.apply {
             txtTitle.text = "Add to Contact"
 
-            if (edtName.text.toString().isNotEmpty()) {
-                edtName.setText("")
-                edtNumber.setText("")
-            }
-
             btnSave.setOnClickListener {
-                if (edtName.text.toString().isNotEmpty() && edtNumber.text.toString()
-                        .isNotEmpty()
+                if (edtName.text.toString().isNotEmpty() && edtNumber.text.toString().isNotEmpty()
                 ) {
                     userDao.insert(
                         UserData(
@@ -74,6 +68,9 @@ class AddUserFragment : DialogFragment() {
                             number = edtNumber.text.toString()
                         )
                     )
+                    edtName.setText("")
+                    edtNumber.setText("")
+
                     listener?.invoke()
                 } else {
                     Toast.makeText(requireActivity(), "Fill form", Toast.LENGTH_SHORT).show()
@@ -82,7 +79,6 @@ class AddUserFragment : DialogFragment() {
             }
         }
     }
-
 
     companion object {
         @JvmStatic
