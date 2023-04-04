@@ -20,11 +20,6 @@ class AddUserFragment : DialogFragment() {
 
     private var appDB = AppDatabase.getInstance()
 
-    private var listener: (() -> Unit)? = null
-    fun setListener(block: () -> Unit) {
-        listener = block
-    }
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
     }
@@ -71,7 +66,6 @@ class AddUserFragment : DialogFragment() {
                     edtName.setText("")
                     edtNumber.setText("")
 
-                    listener?.invoke()
                 } else {
                     Toast.makeText(requireActivity(), "Fill form", Toast.LENGTH_SHORT).show()
                 }

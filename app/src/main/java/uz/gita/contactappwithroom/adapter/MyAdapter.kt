@@ -6,7 +6,7 @@ import androidx.recyclerview.widget.RecyclerView
 import uz.gita.contactappwithroom.databinding.ListItemBinding
 import uz.gita.contactappwithroom.entities.UserData
 
-class MyAdapter() :
+class MyAdapter :
     RecyclerView.Adapter<MyAdapter.ViewHolder>() {
 
     private var list: MutableList<UserData> = ArrayList()

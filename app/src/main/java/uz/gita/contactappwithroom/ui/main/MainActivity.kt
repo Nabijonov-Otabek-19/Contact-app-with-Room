@@ -19,6 +19,7 @@ class MainActivity : AppCompatActivity() {
     private val dialogFragment = AddUserFragment.newInstance()
     private val appDB = AppDatabase.getInstance()
     private val adapter by lazy { MyAdapter() }
+    private var list: ArrayList<UserData> = ArrayList()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -26,8 +27,13 @@ class MainActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         binding.apply {
-            adapter.refreshData(appDB.getUserDao().getUsers())
-            recycler.adapter = adapter
+            appDB.getUserDao().getUsers().observe(this@MainActivity) {
+                list.clear()
+                list.addAll(it)
+                adapter.refreshData(list)
+                recycler.adapter = adapter
+            }
+
             recycler.layoutManager = LinearLayoutManager(this@MainActivity)
 
             adapter.setOnItemClickListener {
@@ -38,10 +44,6 @@ class MainActivity : AppCompatActivity() {
                 dialogFragment.show(supportFragmentManager, null)
             }
 
-            dialogFragment.setListener {
-                adapter.refreshData(appDB.getUserDao().getUsers())
-                recycler.adapter = adapter
-            }
         }
 
         ItemTouchHelper(object : ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.RIGHT) {
@@ -54,17 +56,12 @@ class MainActivity : AppCompatActivity() {
 
             override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
                 val position = viewHolder.adapterPosition
-
-                val deletedCourse: UserData = appDB.getUserDao().getUsers()[position]
+                val deletedCourse: UserData = list[position]
                 appDB.getUserDao().delete(deletedCourse)
-                adapter.refreshData(appDB.getUserDao().getUsers())
-                binding.recycler.adapter = adapter
 
                 Snackbar.make(binding.recycler, "Removed", Snackbar.LENGTH_LONG)
                     .setAction("Undo") {
                         appDB.getUserDao().insert(deletedCourse)
-                        adapter.refreshData(appDB.getUserDao().getUsers())
-                        binding.recycler.adapter = adapter
                     }.show()
             }
         }).attachToRecyclerView(binding.recycler)

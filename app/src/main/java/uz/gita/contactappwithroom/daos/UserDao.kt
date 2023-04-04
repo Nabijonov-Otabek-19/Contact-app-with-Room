@@ -1,5 +1,6 @@
 package uz.gita.contactappwithroom.daos
 
+import androidx.lifecycle.LiveData
 import androidx.room.*
 import uz.gita.contactappwithroom.entities.UserData
 
@@ -13,5 +14,5 @@ interface UserDao {
     fun delete(user: UserData)
 
     @Query("SELECT * FROM users")
-    fun getUsers(): List<UserData>
+    fun getUsers(): LiveData<List<UserData>>
 }
