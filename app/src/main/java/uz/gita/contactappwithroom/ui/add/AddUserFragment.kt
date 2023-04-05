@@ -57,19 +57,29 @@ class AddUserFragment : DialogFragment() {
             btnSave.setOnClickListener {
                 if (edtName.text.toString().isNotEmpty() && edtNumber.text.toString().isNotEmpty()
                 ) {
-                    userDao.insert(
-                        UserData(
-                            name = edtName.text.toString(),
-                            number = edtNumber.text.toString()
+
+                    if (!(userDao.isExistUser(edtName.text.toString()))) {
+                        userDao.insert(
+                            UserData(
+                                name = edtName.text.toString(),
+                                number = edtNumber.text.toString()
+                            )
                         )
-                    )
-                    edtName.setText("")
-                    edtNumber.setText("")
+                        edtName.setText("")
+                        edtNumber.setText("")
+                        dismiss()
+                    } else {
+                        Toast.makeText(
+                            requireActivity(),
+                            "${edtName.text.toString()} is  already exist",
+                            Toast.LENGTH_SHORT
+                        ).show()
+                    }
+
 
                 } else {
                     Toast.makeText(requireActivity(), "Fill form", Toast.LENGTH_SHORT).show()
                 }
-                dismiss()
             }
         }
     }

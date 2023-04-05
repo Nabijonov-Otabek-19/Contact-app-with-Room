@@ -13,6 +13,9 @@ interface UserDao {
     @Delete
     fun delete(user: UserData)
 
+    @Query("SELECT * FROM users WHERE name LIKE :user")
+    fun isExistUser(user: String): Boolean
+
     @Query("SELECT * FROM users")
     fun getUsers(): LiveData<List<UserData>>
 }
